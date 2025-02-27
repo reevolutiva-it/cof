@@ -2,6 +2,12 @@ import utils from "@/utils/index.js";
 import dotenv from "dotenv";
 dotenv.config();
 
+/**
+ * Generates text using a specified LLM model.
+ * @param {Object} context - The context object containing project and operation details.
+ * @param {Object} data - The data object containing model, messages, preparser, parser, validate, query, and stream.
+ * @returns {Object} An object containing the generated text and usage statistics.
+ */
 async function opLlmGen({ context, data }) {
 	/* ;; op:LLM::GEN
 		{model,messages,preparser,parser,...} -> { response , tokens (consumption) }
@@ -57,11 +63,30 @@ async function opLlmGen({ context, data }) {
 		parser = utils.parsers.parse.yaml;
 	}
 
-	const llm_fn = !process.env.LLM_PROVIDER
-		? utils.openai.inference
-		: process.env.LLM_PROVIDER.toLowerCase() === "openai"
-			? utils.openai.inference
-			: utils.anthropic.inference;
+	/**
+	 * Selects the appropriate inference function based on the LLM provider specified in the environment variables.
+	 * 
+	 * If the environment variable `LLM_PROVIDER` is not set, it defaults to using OpenAI's inference function.
+	 * If `LLM_PROVIDER` is set to "openai" (case insensitive), it uses OpenAI's inference function.
+	 * Otherwise, it uses Anthropic's inference function.
+	 * 
+	 * @constant
+	 * @type {Function}
+	 */
+	let llm_fn;
+	switch (process.env.LLM_PROVIDER?.toLowerCase()) {
+		case "openai":
+			llm_fn = utils.openai.inference;
+			break;
+		case "azure":
+			llm_fn = utils.azure.inference;
+			break;
+		case "anthropic":
+			llm_fn = utils.anthropic.inference;
+			break;
+		default:
+			llm_fn = utils.openai.inference; // Valor por defecto
+	}
 
 	const { text, usage } = await llm_fn({
 		model: model,
@@ -97,6 +122,12 @@ async function opLlmGen({ context, data }) {
 	};
 }
 
+/**
+ * Splits an array into chunks of a specified size.
+ * @param {Array} array - The array to be chunked.
+ * @param {number} chunkSize - The size of each chunk.
+ * @returns {Array} An array of chunks.
+ */
 function chunkify(array, chunkSize) {
 	const chunks = [];
 	for (let i = 0; i < array.length; i += chunkSize) {
@@ -105,6 +136,12 @@ function chunkify(array, chunkSize) {
 	return chunks;
 }
 
+/**
+ * Vectorizes a chunk of texts using OpenAI's API.
+ * @param {Object} context - The context object.
+ * @param {Object} data - The data object containing texts.
+ * @returns {Object} An object containing vectors and usage statistics.
+ */
 async function opLlmVectorizeChunk({ context, data }) {
 	/* ;; op:LLM::VECTORIZE:CHUNK
 		{texts} -> {vectors,usage}
@@ -116,6 +153,13 @@ async function opLlmVectorizeChunk({ context, data }) {
 		texts,
 	});
 }
+
+/**
+ * Vectorizes an array of texts by chunking them and processing each chunk.
+ * @param {Object} context - The context object.
+ * @param {Object} data - The data object containing texts.
+ * @returns {Object} An object containing vectors and usage statistics.
+ */
 async function opLlmVectorize({ context, data }) {
 	/* ;; op:LLM::VECTORIZE
 		{texts} -> {vectors,usage}
@@ -145,6 +189,12 @@ async function opLlmVectorize({ context, data }) {
 	};
 }
 
+/**
+ * Simulates a stream for debugging purposes.
+ * @param {Object} context - The context object containing project and operation details.
+ * @param {Object} data - The data object.
+ * @returns {Object} An object containing the generated text and usage statistics.
+ */
 async function opLlmDebugSimulate({ context, data }) {
 	/*
 		debug : simulate a stream
@@ -207,6 +257,7 @@ Deleuze's philosophy encourages us to think beyond binary oppositions and embrac
 		usage: {},
 	};
 }
+
 export default {
 	"op:LLM::GEN": opLlmGen,
 	"op:LLM::VECTORIZE": opLlmVectorize,

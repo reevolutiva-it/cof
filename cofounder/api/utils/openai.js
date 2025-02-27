@@ -12,6 +12,15 @@ try {
 	console.error("utils:openai : " + e);
 }
 
+/**
+ * Performs inference using the OpenAI API with streaming support.
+ *
+ * @param {Object} options - The options for the inference function.
+ * @param {string} [options.model='gpt-4o-mini'] - The model to use for inference.
+ * @param {Array} options.messages - The messages to send to the model.
+ * @param {WritableStream} [options.stream=process.stdout] - The stream to write the output to.
+ * @returns {Promise<Object>} The result of the inference, including the generated text and usage information.
+ */
 async function inference({
 	model = `gpt-4o-mini`,
 	messages,
@@ -55,6 +64,16 @@ async function inference({
 		usage: { model, ...usage },
 	};
 }
+/**
+ * Vectorizes the given texts using the specified embedding model.
+ *
+ * @param {Object} params - The parameters for the vectorization.
+ * @param {string[]} params.texts - The texts to be vectorized.
+ * @param {string} [params.model=process.env.EMBEDDING_MODEL || 'text-embedding-3-small'] - The embedding model to use.
+ * @returns {Promise<Object>} An object containing the vectors and usage information.
+ * @returns {number[][]} returns.vectors - The vectorized representations of the input texts.
+ * @returns {Object} returns.usage - The usage information including the model used.
+ */
 async function vectorize({
 	texts,
 	model = process.env.EMBEDDING_MODEL || `text-embedding-3-small`,
@@ -72,6 +91,14 @@ async function vectorize({
 	};
 }
 
+/**
+ * Transcribes audio from a given file path using the OpenAI Whisper model.
+ *
+ * @param {Object} params - The parameters for the transcription.
+ * @param {string} params.path - The file path of the audio to be transcribed.
+ * @returns {Promise<Object>} A promise that resolves to an object containing the transcript.
+ * @returns {Promise<string>} returns.transcript - The transcribed text from the audio file.
+ */
 async function transcribe({ path }) {
 	console.dir({ "debug:utils:openai:transcribe:received": { path } });
 	const response = await openai.audio.transcriptions.create({

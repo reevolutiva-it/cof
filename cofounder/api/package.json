@@ -22,7 +22,7 @@
 		"deepmerge": "^4.3.1",
 		"delay": "^6.0.0",
 		"dotenv": "^16.4.5",
-		"esm-module-alias": "^2.2.0",
+		"esm-module-alias": "^2.2.1",
 		"express": "^4.19.2",
 		"firebase-admin": "^12.4.0",
 		"firestore": "^1.1.6",
@@ -46,5 +46,19 @@
 		"yaml": "^2.5.0",
 		"yaml-js": "^0.3.1",
 		"yargs": "^17.7.2"
+	},
+	"documentation": {
+		"openai": "The OpenAI dependency is used for various AI-related tasks, such as generating text and embeddings. It is integrated into the application to provide AI capabilities.",
+		"anthropic": "The Anthropic dependency is used as an alternative to OpenAI for AI-related tasks. It provides similar functionalities and is integrated to offer flexibility in choosing AI providers.",
+		"express": "Express is a web application framework for Node.js. It is used to set up the server and define API routes.",
+		"socket.io": "Socket.io is used for real-time communication between the server and clients. It is integrated to handle real-time events and data updates.",
+		"dotenv": "Dotenv is used to load environment variables from a .env file. It is integrated to manage configuration settings.",
+		"lodash": "Lodash is a utility library that provides various functions for common programming tasks. It is integrated to simplify data manipulation.",
+		"firebase-admin": "Firebase Admin SDK is used to interact with Firebase services. It is integrated for database and authentication functionalities.",
+		"yaml": "YAML is a data serialization format. The yaml and yaml-js dependencies are used to parse and generate YAML files.",
+		"sharp": "Sharp is an image processing library. It is integrated to handle image manipulations.",
+		"cors": "CORS is a middleware for Express to enable Cross-Origin Resource Sharing. It is integrated to allow requests from different origins.",
+		"open": "Open is used to open URLs in the default browser. It is integrated to facilitate development and debugging.",
+		"vectra": "Vectra is used for vector operations, such as querying vector databases. It is integrated to handle vector-related tasks."
 	}
 }
