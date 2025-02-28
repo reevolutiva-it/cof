@@ -1,2 +1,4 @@
+node_modules
+cofounder/api/.env
+apps/azure.py
 hidden-file
-api/.env
